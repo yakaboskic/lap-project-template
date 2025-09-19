@@ -17,23 +17,24 @@ cp config/starter.meta.yaml config/my-project.meta.yaml
 # Edit config/my-project.meta.yaml with your paths
 
 # Generate LAP meta file from YAML
-meta-sanity generate-meta config/my-project.meta.yaml config/my-project.meta
-
-# Test LAP installation
-perl lap-src/trunk/bin/run.pl --meta config/my-project.meta --check
-
-# Initialize pipeline (creates directories)
-perl lap-src/trunk/bin/run.pl --meta config/my-project.meta --init
-
-# Run the example pipeline
-perl lap-src/trunk/bin/run.pl --meta config/my-project.meta
+generate-meta config/my-project.meta.yaml config/my-project.meta
 ```
-
 ### Create the following directories
 ```bash
 mkdir log out raw
 ```
 These are required for LAP projects and should generally not be committed to source control. 
+### Test your LAP installation with your pipeline
+```bash
+# Test LAP installation
+perl path/to/lap/installation/trunk/bin/run.pl --meta config/my-project.meta --check
+
+# Initialize pipeline (creates directories)
+perl path/to/lap/installation/trunk/bin/run.pl --meta config/my-project.meta --init --mkdir
+
+# Run the example pipeline
+perl path/to/lap/installation/trunk/bin/run.pl --meta config/my-project.meta
+```
 
 ## 📁 Repository Structure
 

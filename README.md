@@ -29,6 +29,12 @@ perl lap-src/trunk/bin/run.pl --meta config/my-project.meta --init
 perl lap-src/trunk/bin/run.pl --meta config/my-project.meta
 ```
 
+### Create the following directories
+```bash
+mkdir log out raw
+```
+These are required for LAP projects and should generally not be committed to source control. 
+
 ## 📁 Repository Structure
 
 ```

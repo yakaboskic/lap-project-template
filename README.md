@@ -1,4 +1,4 @@
-# LAP Pipeline Template
+# LAP Project Template
 
 A template repository for developing **Lightweight Analysis Pipeline (LAP)** projects using an opinionated, workflow-based architecture that emphasizes modularity, maintainability, and atomic operations.
 

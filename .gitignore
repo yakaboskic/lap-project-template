@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 .idea/*
-=======
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -208,4 +206,8 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
->>>>>>> 26a4dda (Initial commit)
+
+# Lap files that should not be committed
+out/
+log/
+raw/

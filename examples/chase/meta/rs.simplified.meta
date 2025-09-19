@@ -1,0 +1,135 @@
+!config /humgen/diabetes2/users/chase/lap/projects/pigean/config/rs.simplified.cfg
+!key base_dir /humgen/diabetes2/users/chase/lap/projects/pigean
+!key unix_out_dir /humgen/diabetes2/users/chase/lap/projects/pigean/out
+!key log_dir /humgen/diabetes2/users/chase/lap/projects/pigean/log
+!key raw_dir /humgen/diabetes2/users/chase/lap/projects/pigean/raw
+!key web_out_dir http://internal.broadinstitute.org/~cyakabos/pigean
+!key manuscript_dir /humgen/diabetes2/users/chase/lap/submodules/pigean-manuscripts
+!key default_umask 002
+
+comparisons class project
+comparisons pharmaprojects_file /humgen/diabetes2/users/chase/lap/projects/pigean/raw/pharmaprojects.tsv
+comparisons similarity_file /humgen/diabetes2/users/chase/lap/projects/pigean/raw/minikel.similarity.csv
+comparisons portal_to_mesh_map_file /humgen/diabetes2/users/chase/lap/projects/pigean/raw/portal_to_mesh_curated_collected.tsv
+comparisons indications_file /humgen/diabetes2/users/chase/lap/projects/pigean/raw/indications.tsv
+
+falcon class method
+falcon parent comparisons
+falcon associations_file /humgen/diabetes/loki/pipelines/real_data/kp/projects/gibbs/gibbs.falcon.all.tsv
+
+pigean class method
+pigean parent comparisons
+pigean associations_file /humgen/diabetes/users/chase/lap/projects/pigean/raw/pigean_all.associations.tsv
+
+magma class method
+magma parent comparisons
+magma associations_file /humgen/diabetes/loki/pipelines/real_data/kp/projects/gibbs/gibbs.magma.all.tsv
+
+falcon_0.05_gcat class run
+falcon_0.05_gcat parent falcon
+falcon_0.05_gcat p_prob 0.05
+falcon_0.05_gcat source gcat
+falcon_0.05_gcat p_value 1e-8
+
+falcon_0.05_portal class run
+falcon_0.05_portal parent falcon
+falcon_0.05_portal p_prob 0.05
+falcon_0.05_portal source portal
+falcon_0.05_portal p_value 1e-8
+
+falcon_0.2_gcat class run
+falcon_0.2_gcat parent falcon
+falcon_0.2_gcat p_prob 0.2
+falcon_0.2_gcat source gcat
+falcon_0.2_gcat p_value 1e-8
+
+falcon_0.2_portal class run
+falcon_0.2_portal parent falcon
+falcon_0.2_portal p_prob 0.2
+falcon_0.2_portal source portal
+falcon_0.2_portal p_value 1e-8
+
+falcon_0.5_gcat class run
+falcon_0.5_gcat parent falcon
+falcon_0.5_gcat p_prob 0.5
+falcon_0.5_gcat source gcat
+falcon_0.5_gcat p_value 1e-8
+
+falcon_0.5_portal class run
+falcon_0.5_portal parent falcon
+falcon_0.5_portal p_prob 0.5
+falcon_0.5_portal source portal
+falcon_0.5_portal p_value 1e-8
+
+falcon_0.9_gcat class run
+falcon_0.9_gcat parent falcon
+falcon_0.9_gcat p_prob 0.9
+falcon_0.9_gcat source gcat
+falcon_0.9_gcat p_value 1e-8
+
+falcon_0.9_portal class run
+falcon_0.9_portal parent falcon
+falcon_0.9_portal p_prob 0.9
+falcon_0.9_portal source portal
+falcon_0.9_portal p_value 1e-8
+
+falcon_0.99_gcat class run
+falcon_0.99_gcat parent falcon
+falcon_0.99_gcat p_prob 0.99
+falcon_0.99_gcat source gcat
+falcon_0.99_gcat p_value 1e-8
+
+falcon_0.99_portal class run
+falcon_0.99_portal parent falcon
+falcon_0.99_portal p_prob 0.99
+falcon_0.99_portal source portal
+falcon_0.99_portal p_value 1e-8
+
+magma_1e-8 class run
+magma_1e-8 parent magma
+magma_1e-8 p_value 1e-8
+
+pigean_combined_gt1 class run
+pigean_combined_gt1 parent pigean
+pigean_combined_gt1 metric_name combined
+pigean_combined_gt1 metric_value 1
+
+pigean_combined_gt2 class run
+pigean_combined_gt2 parent pigean
+pigean_combined_gt2 metric_name combined
+pigean_combined_gt2 metric_value 2
+
+pigean_combined_gt3 class run
+pigean_combined_gt3 parent pigean
+pigean_combined_gt3 metric_name combined
+pigean_combined_gt3 metric_value 3
+
+pigean_combined_gt4 class run
+pigean_combined_gt4 parent pigean
+pigean_combined_gt4 metric_name combined
+pigean_combined_gt4 metric_value 4
+
+pigean_combined_gt5 class run
+pigean_combined_gt5 parent pigean
+pigean_combined_gt5 metric_name combined
+pigean_combined_gt5 metric_value 5
+
+pigean_combined_gt6 class run
+pigean_combined_gt6 parent pigean
+pigean_combined_gt6 metric_name combined
+pigean_combined_gt6 metric_value 6
+
+pigean_combined_gt7 class run
+pigean_combined_gt7 parent pigean
+pigean_combined_gt7 metric_name combined
+pigean_combined_gt7 metric_value 7
+
+pigean_combined_gt8 class run
+pigean_combined_gt8 parent pigean
+pigean_combined_gt8 metric_name combined
+pigean_combined_gt8 metric_value 8
+
+pigean_combined_gt9 class run
+pigean_combined_gt9 parent pigean
+pigean_combined_gt9 metric_name combined
+pigean_combined_gt9 metric_value 9

@@ -1,0 +1,187 @@
+config: "/humgen/diabetes2/users/chase/lap/projects/pigean/config/rs.simplified.cfg"
+
+keys:
+  base_dir: "/humgen/diabetes2/users/chase/lap/projects/pigean"
+  unix_out_dir: "${base_dir}/out"
+  log_dir: "${base_dir}/log"
+  raw_dir: "${base_dir}/raw"
+  web_out_dir: "http://internal.broadinstitute.org/~cyakabos/pigean"
+  manuscript_dir: "/humgen/diabetes2/users/chase/lap/submodules/pigean-manuscripts"
+  default_umask: "002"
+
+
+classes:
+  comparisons:
+    class: project
+    parent: null
+    properties:
+      pharmaprojects_file: ${raw_dir}/pharmaprojects.tsv
+      similarity_file: ${raw_dir}/minikel.similarity.csv
+      portal_to_mesh_map_file: ${raw_dir}/portal_to_mesh_curated_collected.tsv
+      indications_file: ${raw_dir}/indications.tsv
+
+  falcon:
+    class: method
+    parent: comparisons
+    properties:
+      associations_file: /humgen/diabetes/loki/pipelines/real_data/kp/projects/gibbs/gibbs.falcon.all.tsv
+
+  pigean:
+    class: method
+    parent: comparisons
+    properties:
+      associations_file: /humgen/diabetes/users/chase/lap/projects/pigean/raw/pigean_all.associations.tsv 
+  
+  magma:
+    class: method
+    parent: comparisons
+    properties:
+      associations_file: /humgen/diabetes/loki/pipelines/real_data/kp/projects/gibbs/gibbs.magma.all.tsv
+
+templates:
+  falcon_runs:
+    class: run
+    operation: iter.combination
+    input:
+      - name: p_prob
+        values:
+          - 0.05
+          - 0.2
+          - 0.5
+          - 0.9
+          - 0.99
+      - name: source
+        values:
+          - gcat
+          - portal
+    pattern:
+      name: "falcon_${item:p_prob}_${item:source}"
+      properties:
+        p_prob: ${item:p_prob}
+        source: ${item:source}
+        p_value: 1e-8
+    parent:
+      - falcon
+
+  magma_runs:
+    class: run
+    operation: for_each_item
+    input:
+      - 1e-8
+    pattern:
+      name: "magma_${item}"
+      properties:
+        p_value: ${item}
+    parent:
+      - magma
+
+  pigean_combined_runs:
+    class: run
+    operation: for_each_item
+    input:
+      - "1"
+      - "2"
+      - "3"
+      - "4"
+      - "5"
+      - "6"
+      - "7"
+      - "8"
+      - "9"
+    pattern:
+      name: "pigean_combined_gt${item}"
+      properties:
+        metric_name: "combined"
+        metric_value: ${item}
+    parent:
+      - pigean
+
+  # projects:
+  #   class: relative_success_project
+  #   parent: indirect_support
+  #   operation: for_each_item
+  #   input:
+  #     - reproducibility
+  #     - pigean_project
+  #     - falcon_project
+  #   pattern:
+  #     name: "${item}"
+  #     properties:
+  #       pharmaprojects_file: ${raw_dir}/pharmaprojects.tsv
+  #       indications_file: ${raw_dir}/indications.tsv
+  #       minikel_similarity_file: ${raw_dir}/minikel.similarity.csv
+  #       gcat_to_mesh_curated_file: ${raw_dir}/gcat_to_mesh_curated.tsv
+  #       orphanet_to_mesh_curated_file: ${raw_dir}/orphanet_to_mesh_curated.tsv
+  #       portal_to_mesh_curated_file: ${raw_dir}/portal_to_mesh_curated.tsv
+  #       minikel_associations_file: ${raw_dir}/minikel.associations.tsv
+  #       portal_display_to_internal_map: ${raw_dir}/portal_display_to_internal.tsv
+      
+  # otg_projects:
+  #   class: relative_success_project
+  #   parent: indirect_support
+  #   operation: for_each_item
+  #   input:
+  #     - reproducibility_otg
+  #   pattern:
+  #     name: "${item}"
+  #     properties:
+  #       pharmaprojects_file: ${raw_dir}/otg_in_pharmaprojects_format.tsv
+  #       indications_file: ${raw_dir}/indications.tsv
+  #       minikel_similarity_file: ${raw_dir}/minikel.similarity.csv
+  #       gcat_to_mesh_curated_file: ${raw_dir}/gcat_to_mesh_curated.tsv
+  #       orphanet_to_mesh_curated_file: ${raw_dir}/orphanet_to_mesh_curated.tsv
+  #       portal_to_mesh_curated_file: ${raw_dir}/portal_to_mesh_curated.tsv
+  #       minikel_associations_file: ${raw_dir}/minikel.associations.tsv
+  #       portal_display_to_internal_map: ${raw_dir}/portal_display_to_internal.tsv
+  #   subsets:
+  #     - use_otg_pharmaprojects
+
+  # sources:
+  #   class: rs_source
+  #   operation: for_each_item
+  #   input:
+  #     - genebass
+  #     - piccolo
+  #     - otg
+  #     - omim
+  #     - pigean
+  #   pattern:
+  #     name: "${item}"
+  #     properties:
+  #       source_name: "${item}"
+  #   parent:
+  #    - reproducibility
+  #    - reproducibility_otg
+
+  # areas:
+  #   class: rs_subsource
+  #   operation: for_each_item
+  #   input:
+  #     - all
+  #     - signs_and_symptoms
+  #     - metabolic
+  #     - respiratory
+  #     - infection
+  #     - immune
+  #     - hematology
+  #     - digestive
+  #     - endocrine
+  #     - congenital
+  #     - neurology
+  #     - psychiatry
+  #     - cardiovascular
+  #     - musculoskeletal
+  #     - dermatology
+  #     - ophthalmology
+  #     - oncology
+  #     - other
+  #   pattern:
+  #     name: "${item}"
+  #     properties:
+  #       area_name: "${item}"
+  #   parent:
+  #    - genebass
+  #    - piccolo
+  #    - otg
+  #    - omim
+  #    - pigean

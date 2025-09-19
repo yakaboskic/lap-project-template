@@ -1,0 +1,170 @@
+config: "config/starter.cfg"
+
+# Global configuration keys
+keys:
+  # IMPORTANT: Update these paths for your system
+  base_dir: "/path/to/your/project/directory"
+  unix_out_dir: "${base_dir}/out"
+  log_dir: "${base_dir}/log"
+  raw_dir: "${base_dir}/raw"
+
+  # LAP installation path - CHANGE THIS
+  lap_home: "/path/to/your/lap/installation"
+
+  # Web output directory (optional - for web UI)
+  web_out_dir: "http://your-server/~username/lap-output"
+
+  # File permissions
+  default_umask: "002"
+
+# Define class instances
+# This replaces the traditional meta file format with a more readable YAML structure
+classes:
+  # Project level - top of the hierarchy
+  my_analysis_project:
+    class: project
+    parent: null
+    description: "Main analysis project"
+
+  # Dataset level - represents different data sources
+  pilot_study:
+    class: dataset
+    parent: my_analysis_project
+    description: "Pilot study dataset"
+    properties:
+      input_file_path: "${raw_dir}/pilot_data.tsv"
+      dataset_type: "pilot"
+
+  main_study:
+    class: dataset
+    parent: my_analysis_project
+    description: "Main study dataset"
+    properties:
+      input_file_path: "${raw_dir}/main_data.tsv"
+      dataset_type: "main"
+
+  validation_study:
+    class: dataset
+    parent: my_analysis_project
+    description: "Validation study dataset"
+    properties:
+      input_file_path: "${raw_dir}/validation_data.tsv"
+      dataset_type: "validation"
+
+  # Analysis level - different analytical approaches
+  standard_analysis:
+    class: analysis
+    parent: pilot_study
+    description: "Standard statistical analysis"
+    properties:
+      analysis_type: "standard"
+      significance_threshold: "0.05"
+
+  stringent_analysis:
+    class: analysis
+    parent: pilot_study
+    description: "Stringent analysis with multiple testing correction"
+    properties:
+      analysis_type: "stringent"
+      significance_threshold: "0.001"
+
+  exploratory_analysis:
+    class: analysis
+    parent: main_study
+    description: "Exploratory analysis for hypothesis generation"
+    properties:
+      analysis_type: "exploratory"
+      significance_threshold: "0.1"
+
+  validation_analysis:
+    class: analysis
+    parent: validation_study
+    description: "Validation of findings"
+    properties:
+      analysis_type: "validation"
+      significance_threshold: "0.05"
+
+  # Result level - different output formats and summaries
+  summary_results:
+    class: result
+    parent: standard_analysis
+    description: "Summary results and main findings"
+
+  detailed_results:
+    class: result
+    parent: stringent_analysis
+    description: "Detailed results with full statistical output"
+
+  exploration_results:
+    class: result
+    parent: exploratory_analysis
+    description: "Exploratory analysis results"
+
+  validation_results:
+    class: result
+    parent: validation_analysis
+    description: "Validation analysis results"
+
+# Templates for generating multiple similar instances
+# This is where meta-sanity really shines - easy bulk instance generation
+templates:
+
+  # Example: Generate multiple trait analyses
+  # Uncomment and customize for your use case
+  # trait_analyses:
+  #   class: analysis
+  #   operation: for_each_item
+  #   input:
+  #     - trait_001
+  #     - trait_002
+  #     - trait_003
+  #     - trait_004
+  #   pattern:
+  #     name: "analysis_${item}"
+  #     parent: main_study
+  #     properties:
+  #       analysis_type: "trait_specific"
+  #       trait_name: "${item}"
+  #       significance_threshold: "0.05"
+  #   description: "Per-trait analysis template"
+
+  # Example: Combinatorial analysis across methods and datasets
+  # method_dataset_combinations:
+  #   class: analysis
+  #   operation: iter.combination
+  #   input:
+  #     - name: method
+  #       values:
+  #         - "linear_regression"
+  #         - "logistic_regression"
+  #         - "random_forest"
+  #     - name: dataset
+  #       values:
+  #         - "pilot_study"
+  #         - "main_study"
+  #   pattern:
+  #     name: "${item:method}__${item:dataset}"
+  #     parent: "${item:dataset}"
+  #     properties:
+  #       analysis_type: "${item:method}"
+  #       dataset_source: "${item:dataset}"
+  #       significance_threshold: "0.05"
+  #   description: "Method-dataset combination analysis"
+
+  # Example: Time-series analysis with different windows
+  # time_window_analyses:
+  #   class: analysis
+  #   operation: for_each_item
+  #   input:
+  #     - "1week"
+  #     - "2week"
+  #     - "1month"
+  #     - "3month"
+  #   pattern:
+  #     name: "timeseries_${item}"
+  #     parent: main_study
+  #     properties:
+  #       analysis_type: "timeseries"
+  #       time_window: "${item}"
+  #       significance_threshold: "0.05"
+  #   description: "Time-series analysis with different windows"

@@ -1,0 +1,1505 @@
+config: "/humgen/diabetes2/users/chase/lap/projects/pigean/config/validation.cfg"
+
+keys:
+  base_dir: "/humgen/diabetes2/users/chase/lap/projects/pigean"
+  unix_out_dir: "${base_dir}/out"
+  log_dir: "${base_dir}/log"
+  raw_dir: "${base_dir}/raw"
+  gwas_dir: "/humgen/diabetes2/users/lthakur/lap_test/ldsc/results/raw/eval_gwas"
+  gwas_dir_2: "/home/unix/flannick/links/ldsc/results/raw"
+  orpha_dir: "/humgen/diabetes2/users/lthakur/lap_test/ldsc/results/raw/orpha_lists_v2"
+  web_out_dir: "http://internal.broadinstitute.org/~cyakabos/pigean"
+  default_umask: "002"
+
+# Subsets are just labels to apply conditioning to template expansions
+subsets:
+  - name: common
+    description: "Common traits"
+  - name: rare
+    description: "Rare traits"
+  - name: well_powered
+    description: "Well powered traits"
+  - name: top_geneset_library_models
+    description: "Top performing geneset library models"
+
+classes:
+  # Project Classes
+  indirect_support:
+    class: project
+    parent: null
+  
+  geneset_analysis:
+    class: validation
+    parent: indirect_support
+    properties:
+      gold_standard_genes_file: ${raw_dir}/gold_standard_genes.portal.json
+      models_config_file: ${raw_dir}/model-info.yaml
+      phenotype_file: ${raw_dir}/Phenotypes.tsv
+      phenotype_info_file: ${raw_dir}/amp-traits-mapping-portal-phenotypes_06262024.csv
+      phenotype_sample_size_file: ${raw_dir}/gwas/bottomline/gwas_power_metadata.tsv
+  
+  falcon:
+    class: validation
+    parent: indirect_support
+    properties:
+      gold_standard_genes_file: ${raw_dir}/gold_standard_genes.portal.json
+      models_config_file: ${raw_dir}/model-info.yaml
+      phenotype_file: ${raw_dir}/Phenotypes.tsv
+      phenotype_info_file: ${raw_dir}/amp-traits-mapping-portal-phenotypes_06262024.csv
+
+  p_validation:
+    class: validation
+    parent: indirect_support
+    properties:
+      models_config_file: ${raw_dir}/model-info.yaml
+
+  portal_regression_test:
+    class: validation
+    description: "Validating portal model over traits appears like on the online portal"
+    parent: indirect_support
+    properties:
+      models_config_file: ${raw_dir}/model-info.yaml
+
+  p_results:
+    class: results
+    parent: p_validation
+
+
+  # Trait Groups
+  rare:
+    class: trait_group
+    parent: geneset_analysis
+  
+  common:
+    class: trait_group
+    parent:
+      - geneset_analysis
+
+  well_powered:
+    class: trait_group
+    parent:
+      - p_validation
+  
+  portal_traits:
+    class: trait_group
+    parent:
+      - portal_regression_test
+
+  falcon_traits:
+    class: trait_group
+    parent:
+      - falcon
+
+  # Model Classes
+  full_oa4ol:
+    class: model
+    parent:
+      - geneset_analysis
+      - p_validation
+
+  full_oa4ol_lincs_expanded:
+    class: model
+    parent:
+      - geneset_analysis
+      - p_validation
+
+  full_oa4ol_msigdb_expanded:
+    class: model
+    parent:
+      - geneset_analysis
+      - p_validation
+
+  full_all_expanded:
+    class: model
+    parent:
+      - geneset_analysis
+      - p_validation
+
+  no_circularity:
+    class: model
+    parent:
+      - geneset_analysis
+      - p_validation
+
+  no_circularity_lincs_expanded:
+    class: model
+    parent:
+      - geneset_analysis
+      - p_validation
+
+  no_circularity_msigdb_expanded:
+    class: model
+    parent:
+      - geneset_analysis
+      - p_validation
+
+  no_circularity_all_expanded:
+    class: model
+    parent:
+      - geneset_analysis
+      - p_validation
+
+  msigdb_library_nohp:
+    class: model
+    parent:
+      - geneset_analysis
+      - p_validation
+
+  msigdb_pathways:
+    class: model
+    parent:
+      - geneset_analysis
+      - p_validation
+
+  full_textmining:
+    class: model
+    parent:
+      - geneset_analysis
+      - p_validation
+
+  textmining_no_gwas:
+    class: model
+    parent:
+      - geneset_analysis
+      - p_validation
+
+  textmining_only_gwas:
+    class: model
+    parent:
+      - geneset_analysis
+      - p_validation
+
+  textmining_no_drugs:
+    class: model
+    parent:
+      - geneset_analysis
+      - p_validation
+
+  textmining_only_drugs:
+    class: model
+    parent:
+      - geneset_analysis
+      - p_validation
+
+  textmining_no_gwas_and_no_drugs:
+    class: model
+    parent:
+      - geneset_analysis
+      - p_validation
+
+  textmining_no_gwas_and_only_drugs:
+    class: model
+    parent:
+      - geneset_analysis
+      - p_validation
+
+  textmining_only_gwas_and_no_drugs:
+    class: model
+    parent:
+      - geneset_analysis
+      - p_validation
+  
+  textmining_only_gwas_and_only_drugs:
+    class: model
+    parent:
+      - geneset_analysis
+      - p_validation
+  
+  portal_model:
+    class: model
+    parent:
+      - p_validation
+      - geneset_analysis
+      - portal_regression_test
+
+  msigdb_mouse_p:
+    class: model
+    parent:
+      - p_validation
+
+  # Top performing geneset library models
+  ## Soloed models
+  top_mouse_2024:
+    class: model
+    parent:
+      - geneset_analysis
+    subset:
+      - top_geneset_library_models
+
+  top_mesh_no_gwas:
+    class: model
+    parent:
+      - geneset_analysis
+    subset:
+      - top_geneset_library_models
+
+  top_msigdb_c2_cp:
+    class: model
+    parent:
+      - geneset_analysis
+    subset:
+      - top_geneset_library_models
+
+  top_mouse_ko_2024:
+    class: model
+    parent:
+      - geneset_analysis
+    subset:
+      - top_geneset_library_models
+
+  top_rummageo:
+    class: model
+    parent:
+      - geneset_analysis
+    subset:
+      - top_geneset_library_models
+
+  top_all_libraries:
+    class: model
+    parent:
+      - geneset_analysis
+    subset:
+      - top_geneset_library_models
+
+  # Geneset List Classes
+  msigdb_nohp_all:
+    class: genesets
+    parent:
+      - geneset_analysis
+      - falcon
+
+  msigdb_nohp:
+    class: genesets
+    parent:
+      - geneset_analysis
+      - falcon
+
+  lincs_all:
+    class: genesets
+    parent:
+      - geneset_analysis
+    properties:
+      geneset_list_metadata_file: ${raw_dir}/lincs/lincs_metadata.all.tsv
+  
+  mesh_full_textmining:
+    class: genesets
+    parent:
+      - geneset_analysis
+      - falcon
+
+  mesh_no_gwas:
+    class: genesets
+    parent:
+      - geneset_analysis
+  
+  mesh_only_gwas:
+    class: genesets
+    parent:
+      - geneset_analysis
+
+  mesh_no_drugs:
+    class: genesets
+    parent:
+      - geneset_analysis
+  
+  mesh_only_drugs:
+    class: genesets
+    parent:
+      - geneset_analysis
+
+  mesh_only_gwas_and_no_drugs:
+    class: genesets
+    parent:
+      - geneset_analysis
+  
+  mesh_no_gwas_and_no_drugs:
+    class: genesets
+    parent:
+      - geneset_analysis
+  
+  mesh_no_gwas_and_only_drugs:
+    class: genesets
+    parent:
+      - geneset_analysis
+
+  mesh_only_gwas_and_only_drugs:
+    class: genesets
+    parent:
+      - geneset_analysis
+
+  ocr_mouse:
+    class: genesets
+    parent:
+      - geneset_analysis
+      - falcon
+
+  rummageo:
+    class: genesets
+    parent:
+      - geneset_analysis
+    properties:
+      geneset_list_metadata_file: ${raw_dir}/rummageo-human-processed-meta.json
+
+  mouse_2024:
+    class: genesets
+    parent:
+      - geneset_analysis
+      - falcon
+
+  orpha:
+    class: genesets
+    parent:
+      - geneset_analysis
+      - falcon
+
+  pops_sparse_small:
+    class: genesets
+    parent:
+      - geneset_analysis
+
+  string_notext_medium:
+    class: genesets
+    parent:
+      - geneset_analysis
+
+  impc:
+    class: genesets
+    parent:
+      - geneset_analysis
+      - falcon
+
+  ocr_human:
+    class: genesets
+    parent:
+      - geneset_analysis
+      - falcon
+
+  mouse_KO_2024:
+    class: genesets
+    parent:
+      - geneset_analysis
+      - falcon
+
+  enrichr_filtered_all:
+    class: genesets
+    parent:
+      - geneset_analysis
+
+  lincs_aby:
+    class: genesets
+    parent:
+      - geneset_analysis
+    properties:
+      geneset_list_metadata_file: ${raw_dir}/lincs/lincs_metadata_lincs_aby.tsv
+
+  lincs_cp:
+    class: genesets
+    parent:
+      - geneset_analysis
+    properties:
+      geneset_list_metadata_file: ${raw_dir}/lincs/lincs_metadata_lincs_cp_removed_duplicates.tsv
+
+  lincs_lig:
+    class: genesets
+    parent:
+      - geneset_analysis
+    properties:
+      geneset_list_metadata_file: ${raw_dir}/lincs/lincs_metadata_lincs_lig.tsv
+
+  lincs_oe:
+    class: genesets
+    parent:
+      - geneset_analysis
+    properties:
+      geneset_list_metadata_file: ${raw_dir}/lincs/lincs_metadata_lincs_oe.tsv
+
+  lincs_shRNA:
+    class: genesets
+    parent:
+      - geneset_analysis
+    properties:
+      geneset_list_metadata_file: ${raw_dir}/lincs/lincs_metadata_lincs_shRNA.tsv
+
+  lincs_siRNA:
+    class: genesets
+    parent:
+      - geneset_analysis
+    properties:
+      geneset_list_metadata_file: ${raw_dir}/lincs/lincs_metadata_lincs_siRNA.tsv
+
+  lincs_xpr:
+    class: genesets
+    parent:
+      - geneset_analysis
+    properties:
+      geneset_list_metadata_file: ${raw_dir}/lincs/lincs_metadata_lincs_xpr.tsv
+
+  msigdb_c1:
+    class: genesets
+    parent:
+      - geneset_analysis
+      - falcon
+
+  msigdb_c2:
+    class: genesets
+    parent:
+      - geneset_analysis
+      - falcon
+  
+  msigdb_c3:
+    class: genesets
+    parent:
+      - geneset_analysis
+      - falcon
+
+  msigdb_c4:
+    class: genesets
+    parent:
+      - geneset_analysis
+      - falcon
+
+  msigdb_c5_nohp:
+    class: genesets
+    parent:
+      - geneset_analysis
+      - falcon
+
+  msigdb_c6:
+    class: genesets
+    parent:
+      - geneset_analysis
+      - falcon
+    comment: Collapsed on BMI, so p based on Height and T2D analysis.
+
+  msigdb_c7:
+    class: genesets
+    parent:
+      - geneset_analysis
+      - falcon
+
+  msigdb_c8:
+    class: genesets
+    parent:
+      - geneset_analysis
+      - falcon
+
+  msigdb_h:
+    class: genesets
+    parent:
+      - geneset_analysis
+      - falcon
+
+  msigdb_c1_c3_c4_c6_c7_c8:
+    class: genesets
+    parent:
+      - geneset_analysis
+
+  msigdb_c2_cp:
+    class: genesets
+    parent:
+      - geneset_analysis
+
+  string_textmining:
+    class: genesets
+    parent:
+      - geneset_analysis
+
+  msigdb_nohp_mouse_concat:
+    class: genesets
+    parent:
+      - geneset_analysis
+
+  cfde_all:
+    class: genesets
+    parent:
+      - geneset_analysis
+
+  cfde_overlap:
+    class: genesets
+    parent:
+      - geneset_analysis
+
+  # Experiment Classes
+  ## Experiment naming notation:
+  ## {EXPERIMENT-NUMBER}__{EXPERIMENT-MODEL}__{TRAIT-SET}
+  1__full_oa4ol__common:
+    class: experiment
+    properties:
+      model_name: full_oa4ol
+    parent: common
+
+  2__full_oa4ol__rare:
+    class: experiment
+    properties:
+      model_name: full_oa4ol
+    parent: rare
+
+  3__full_oa4ol_lincs_expanded__common:
+    class: experiment
+    properties:
+      model_name: full_oa4ol_lincs_expanded
+    parent: common
+
+  4__full_oa4ol_lincs_expanded__rare:
+    class: experiment
+    properties:
+      model_name: full_oa4ol_lincs_expanded
+    parent: rare
+
+  5__full_oa4ol_msigdb_expanded__common:
+    class: experiment
+    properties:
+      model_name: full_oa4ol_msigdb_expanded
+    parent: common
+
+  6__full_oa4ol_msigdb_expanded__rare:
+    class: experiment
+    properties:
+      model_name: full_oa4ol_msigdb_expanded
+    parent: rare
+
+  7__full_all_expanded__common:
+    class: experiment
+    properties:
+      model_name: full_all_expanded
+    parent: common
+
+  8__full_all_expanded__rare:
+    class: experiment
+    properties:
+      model_name: full_all_expanded
+    parent: rare
+
+  9__no_circularity__common:
+    class: experiment
+    properties:
+      model_name: no_circularity
+    parent: common
+
+  10__no_circularity__rare:
+    class: experiment
+    properties:
+      model_name: no_circularity
+    parent: rare
+
+  11__no_circularity_lincs_expanded__common:
+    class: experiment
+    properties:
+      model_name: no_circularity_lincs_expanded
+    parent: common
+
+  12__no_circularity_lincs_expanded__rare:
+    class: experiment
+    properties:
+      model_name: no_circularity_lincs_expanded
+    parent: rare
+
+  13__no_circularity_msigdb_expanded__common:
+    class: experiment
+    properties:
+      model_name: no_circularity_msigdb_expanded
+    parent: common
+
+  14__no_circularity_msigdb_expanded__rare:
+    class: experiment
+    properties:
+      model_name: no_circularity_msigdb_expanded
+    parent: rare
+
+  15__no_circularity_all_expanded__common:
+    class: experiment
+    properties:
+      model_name: no_circularity_all_expanded
+    parent: common
+
+  16__no_circularity_all_expanded__rare:
+    class: experiment
+    properties:
+      model_name: no_circularity_all_expanded
+    parent: rare
+
+  17__msigdb_nohp__common:
+    class: experiment
+    properties:
+      model_name: msigdb_library_nohp
+    parent: common
+
+  18__msigdb_nohp__rare:
+    class: experiment
+    properties:
+      model_name: msigdb_library_nohp
+    parent: rare
+
+  19__msigdb_pathways__common:
+    class: experiment
+    properties:
+      model_name: msigdb_pathways
+    parent: common
+
+  20__msigdb_pathways__rare:
+    class: experiment
+    properties:
+      model_name: msigdb_pathways
+    parent: rare
+
+  # Jumping to 31, see experimental dependencies
+
+  31__full_textmining__common:
+      class: experiment
+      properties:
+        model_name: full_textmining
+      parent: common
+
+  32__full_textmining__rare:
+      class: experiment
+      properties:
+        model_name: full_textmining
+      parent: rare
+
+  33__text_mining_only_gwas__common:
+      class: experiment
+      properties:
+        model_name: textmining_only_gwas
+      parent: common
+
+  34__text_mining_only_gwas__rare:
+      class: experiment
+      properties:
+        model_name: textmining_only_gwas
+      parent: rare
+
+  35__text_mining_no_gwas__common:
+      class: experiment
+      properties:
+        model_name: textmining_no_gwas
+      parent: common
+
+  36__text_mining_no_gwas__rare:
+      class: experiment
+      properties:
+        model_name: textmining_no_gwas
+      parent: rare
+
+  # Reproducibility experiments with the portal model on the common and rare traits
+  100__portal_model__common:
+    class: experiment
+    properties:
+      model_name: portal_model
+    parent:
+      - common
+      - portal_traits
+
+  101__portal_model__rare:
+    class: experiment
+    properties:
+      model_name: portal_model
+    parent:
+      - rare
+      - portal_traits
+
+  # Top performing geneset library experiments
+  top__mouse_2024__common:
+    class: experiment
+    properties:
+      model_name: top_mouse_2024
+    parent:
+      - common
+
+  top__mouse_2024__rare:
+    class: experiment
+    properties:
+      model_name: top_mouse_2024
+    parent:
+      - rare
+
+  top__mesh_no_gwas__common:
+    class: experiment
+    properties:
+      model_name: top_mesh_no_gwas
+    parent:
+      - common
+
+  top__mesh_no_gwas__rare:
+    class: experiment
+    properties:
+      model_name: top_mesh_no_gwas
+    parent:
+      - rare
+
+  top__msigdb_c2_cp__common:
+    class: experiment
+    properties:
+      model_name: top_msigdb_c2_cp
+    parent:
+      - common
+
+  top__msigdb_c2_cp__rare:
+    class: experiment
+    properties:
+      model_name: top_msigdb_c2_cp
+    parent:
+      - rare
+
+  top__mouse_ko_2024__common:
+    class: experiment
+    properties:
+      model_name: top_mouse_ko_2024
+    parent:
+      - common
+
+  top__mouse_ko_2024__rare:
+    class: experiment
+    properties:
+      model_name: top_mouse_ko_2024
+    parent:
+      - rare
+  
+  top__rummageo__common:
+    class: experiment
+    properties:
+      model_name: top_rummageo
+    parent:
+      - common
+      
+  top__rummageo__rare:
+    class: experiment
+    properties:
+      model_name: top_rummageo
+    parent:
+      - rare
+
+  top__all_libraries__common:
+    class: experiment
+    properties:
+      model_name: top_all_libraries
+    parent:
+      - common
+
+  top__all_libraries__rare:
+    class: experiment
+    properties:
+      model_name: top_all_libraries
+    parent:
+      - rare
+
+templates:
+
+  # Trait Templates
+  common_traits:
+    class: trait
+    operation: for_each_item
+    input:
+      - AF
+      - HYPERTENSION
+      - T2D
+      - HDL
+      - MDD
+      - MI
+      - RhA
+      - SCZ
+      - ALLOA
+      - AnyCVD
+      - Eczema
+      - HF
+      - LDL
+    pattern:
+      name: "${item}"
+      properties:
+        trait_gwas_file: ${gwas_dir}/${item}.sumstats.gz
+        trait_type: common
+    subsets:
+      - common
+    parent: 
+      - common
+      - portal_traits
+
+  # Common traits with GWAS in another directory
+  other_gwas_traits:
+    class: trait
+    operation: for_each_item
+    input:
+      - preeclampsia
+    pattern:
+      name: "${item}"
+      properties:
+        trait_gwas_file: ${gwas_dir_2}/${item}.sumstats.gz
+        trait_type: common
+    subsets:
+      - common
+    parent: 
+      - common
+      - portal_traits
+
+  well_powered_traits:
+    class: trait
+    operation: iter.combination
+    input:
+      - name: trait
+        values:
+          - BMI
+          - HEIGHT
+          - T2D
+      - name: se_inflation_factor
+        values:
+          - 1
+          - 1.5
+          - 2
+          - 3
+          - 4
+          - 5
+          - 10
+          - 20
+    pattern:
+      name: "${item:trait}__se-${item:se_inflation_factor}"
+      properties:
+        trait_gwas_file: ${gwas_dir}/${item:trait}.sumstats.gz
+        standard_error_inflation_factor: ${item:se_inflation_factor}
+        trait_type: common
+    subsets:
+      - well_powered
+    parent: well_powered
+  
+  rare_traits:
+    class: trait
+    operation: for_each_item
+    input:
+      # These are the traits that are in the Orphanet validation set
+      ## See raw/orphanet_validation_set.json for the list of groups and specific disorders
+      - Neuromuscular_disease_Orphanet_68381
+      - Inherited_arrhythmogenic_cardiomyopathy_Orphanet_247
+      - Primary_immunodeficiency_Orphanet_101997
+      - Mucopolysaccharidosis_Orphanet_79213
+      - Sphingolipidosis_Orphanet_79225
+      - Ciliopathy_Orphanet_363250
+      - Rare_sleep_disorder_Orphanet_68354
+      - Rare_pervasive_developmental_disorder_Orphanet_168778
+      - Sexchromosome_anomaly_Orphanet_98155
+      - Autosomal_trisomy_Orphanet_98130
+      - Hereditary_ataxia_Orphanet_183518
+      - Peroxisomal_disease_Orphanet_68373
+      - Mitochondrial_disease_Orphanet_68380
+      - Disorder_of_purine_or_pyrimidine_metabolism_Orphanet_79224
+      - Congenital_myasthenic_syndrome_Orphanet_590
+      - Rare_hypertrophic_cardiomyopathy_Orphanet_217569
+      - Amyloidosis_Orphanet_69
+      - Hemoglobinopathy_Orphanet_68364
+      - Spondyloepiphyseal_dysplasia_and_spondyloepimetaphyseal_dysplasia_Orphanet_253
+      - Ectodermal_dysplasia_syndrome_Orphanet_79373
+      - Amyotrophic_lateral_sclerosis_Orphanet_803
+      - Zellweger_syndrome_Orphanet_912
+      - Fanconi_anemia_Orphanet_84
+      - RomanoWard_syndrome_Orphanet_101016
+      - Cystic_fibrosis_Orphanet_586
+      - Noonan_syndrome_Orphanet_648
+      - Acute_promyelocytic_leukemia_Orphanet_520
+      - Bulbospinal_muscular_atrophy_Orphanet_206701
+      - Glioblastoma_Orphanet_360
+      - Williams_syndrome_Orphanet_904
+      - Kallmann_syndrome_Orphanet_478
+      - Hirschsprung_disease_Orphanet_388
+      - Brugada_syndrome_Orphanet_130
+      - Dyskeratosis_congenita_Orphanet_1775
+      - Behet_disease_Orphanet_117
+      - Jeune_syndrome_Orphanet_474
+      - Congenital_hypothyroidism_Orphanet_442
+      - DiamondBlackfan_anemia_Orphanet_124
+      - Leber_hereditary_optic_neuropathy_Orphanet_104
+      - WalkerWarburg_syndrome_Orphanet_899
+      # - Earlyonset_zonular_cataract_Orphanet_98995
+      # - Anorectal_malformation_Orphanet_96346
+      # - Lissencephaly_Orphanet_48471
+      # - Restrictive_cardiomyopathy_Orphanet_217632
+      # - Rare_sleep_disorder_Orphanet_68354
+      # - Isolated_complex_I_deficiency_Orphanet_2609
+      # - Kallmann_syndrome_Orphanet_478
+      # - Inherited_arrhythmogenic_cardiomyopathy_Orphanet_247
+      # - Autosomal_recessive_limbgirdle_muscular_dystrophy_Orphanet_102015
+      # - Familial_isolated_dilated_cardiomyopathy_Orphanet_154
+      # - Dilated_cardiomyopathy_Orphanet_217604
+      # - Congenital_myasthenic_syndrome_Orphanet_590
+      # - Common_variable_immunodeficiency_Orphanet_1572
+      # - Lymphoma_Orphanet_223735
+      # - Usher_syndrome_Orphanet_886
+      # - Acute_myeloid_leukemia_with_recurrent_genetic_anomaly_Orphanet_98277
+      # - Anterior_segment_developmental_anomaly_Orphanet_88632
+      # - Holoprosencephaly_Orphanet_2162
+      # - Renal_or_urinary_tract_malformation_Orphanet_93545
+      # - Severe_combined_immunodeficiency_Orphanet_183660
+      # - Cystic_fibrosis_Orphanet_586
+      # - NonHodgkin_lymphoma_Orphanet_547
+      # - Familial_prostate_cancer_Orphanet_1331
+      # - Primary_lymphedema_Orphanet_77240
+      # - Nonspecific_syndromic_intellectual_disability_Orphanet_528084
+      # - Xlinked_nonsyndromic_intellectual_disability_Orphanet_777
+      # - Colobomatous_microphthalmia_Orphanet_98938
+      # - Vasculitis_Orphanet_52759
+      # - Mendelian_susceptibility_to_mycobacterial_diseases_Orphanet_748
+      # - Autosomal_trisomy_Orphanet_98130
+      # - Precursor_Tcell_acute_lymphoblastic_leukemia_Orphanet_99861
+      # - Isolated_microphthalmiaanophthalmiacoloboma_Orphanet_2542
+      # - Postsynaptic_congenital_myasthenic_syndromes_Orphanet_98913
+      # - Lobar_holoprosencephaly_Orphanet_93924
+      # - Sexchromosome_anomaly_Orphanet_98155
+      # - Distal_arthrogryposis_Orphanet_97120
+      # - Bulbospinal_muscular_atrophy_Orphanet_206701
+      # - Peroxisome_biogenesis_disorder_Orphanet_79189
+      # - Diffuse_palmoplantar_keratoderma_Orphanet_307141
+      # - Panuveitis_Orphanet_280898
+      # - Hereditary_nonpolyposis_colon_cancer_Orphanet_443909
+      # - Peroxisomal_disease_Orphanet_68373
+      # - Orofaciodigital_syndrome_Orphanet_140997
+      # - Inherited_retinal_disorder_Orphanet_71862
+      # - Infantile_Refsum_disease_Orphanet_772
+      # - RomanoWard_syndrome_Orphanet_101016
+      # - Hyperpigmentation_of_the_skin_Orphanet_79375
+      # - Mucopolysaccharidosis_Orphanet_79213
+      # - Conotruncal_heart_malformations_Orphanet_2445
+      # - Rare_pervasive_developmental_disorder_Orphanet_168778
+      # - Interstitial_lung_disease_Orphanet_182095
+      # - Isolated_agammaglobulinemia_Orphanet_229717
+      # - Amyloidosis_Orphanet_69
+      # - Joubert_syndrome_Orphanet_475
+      # - Systemic_lupus_erythematosus_Orphanet_536
+      # - Primary_immunodeficiency_Orphanet_101997
+      # - Male_infertility_with_azoospermia_or_oligozoospermia_due_to_single_gene_mutation_Orphanet_399805
+      # - Neurodegeneration_with_brain_iron_accumulation_Orphanet_385
+      # - Isolated_cytochrome_C_oxidase_deficiency_Orphanet_254905
+      # - Neuronal_ceroid_lipofuscinosis_Orphanet_216
+      # - Rare_hypertrophic_cardiomyopathy_Orphanet_217569
+      # - Soft_tissue_sarcoma_Orphanet_3394
+      # - Anterior_uveitis_Orphanet_280886
+      # - WalkerWarburg_syndrome_Orphanet_899
+      # - Limbgirdle_muscular_dystrophy_Orphanet_263
+      # - Osteopetrosis_and_related_disorders_Orphanet_2781
+      # - Bcell_nonHodgkin_lymphoma_Orphanet_171915
+      # - Oligodontia_Orphanet_99798
+      # - Acute_myeloid_leukemia_Orphanet_519
+      # - Disorder_of_purine_or_pyrimidine_metabolism_Orphanet_79224
+      # - Cutis_laxa_Orphanet_209
+      # - CoffinSiris_syndrome_Orphanet_1465
+      # - Cleft_lippalate_Orphanet_199306
+      # - Familial_thoracic_aortic_aneurysm_and_aortic_dissection_Orphanet_91387
+      # - 46XY_difference_of_sex_development_Orphanet_98085
+      # - Skin_vascular_disease_Orphanet_79379
+      # - Polycythemia_Orphanet_98427
+      # - Leber_hereditary_optic_neuropathy_Orphanet_104
+      # - Distal_myopathy_Orphanet_599
+      # - Gliosarcoma_Orphanet_251576
+      # - CharcotMarieTooth_diseaseHereditary_motor_and_sensory_neuropathy_Orphanet_166
+      # - Zellweger_syndrome_Orphanet_912
+      # - Alopecia_Orphanet_79364
+      # - 46XX_gonadal_dysgenesis_Orphanet_243
+      # - Isolated_complex_III_deficiency_Orphanet_1460
+      # - Earlyonset_lamellar_cataract_Orphanet_441452
+      # - Infantile_spasms_syndrome_Orphanet_3451
+      # - Mitochondrial_myopathy_Orphanet_206966
+      # - Hirschsprung_disease_Orphanet_388
+      # - Jeune_syndrome_Orphanet_474
+      # - Osteogenesis_imperfecta_type_3_Orphanet_216812
+      # - Neonatal_adrenoleukodystrophy_Orphanet_44
+      # - Difference_of_sex_development_Orphanet_90771
+      # - Pediatriconset_glaucoma_of_genetic_origin_Orphanet_359
+      # - Pituitary_deficiency_Orphanet_101957
+      # - Partial_deletion_of_the_short_arm_of_chromosome_1_Orphanet_261857
+      # - Muscular_tumor_Orphanet_206982
+      # - Congenital_hypothyroidism_Orphanet_442
+      # - Renal_agenesis_Orphanet_411709
+      # - Retinitis_pigmentosa_Orphanet_791
+      # - Meckel_syndrome_Orphanet_564
+      # - Osteogenesis_imperfecta_Orphanet_666
+      # - Dysostosis_Orphanet_364559
+      # - Huntington_diseaselike_syndrome_Orphanet_158266
+      # - Autosomal_recessive_primary_microcephaly_Orphanet_2512
+      # - Juvenile_idiopathic_arthritis_Orphanet_92
+      # - Partial_deletion_of_the_long_arm_of_chromosome_15_Orphanet_262119
+      # - Ichthyosis_Orphanet_79354
+      # - Autosomal_dominant_nonsyndromic_intellectual_disability_Orphanet_178469
+      # - Hereditary_breast_andor_ovarian_cancer_syndrome_Orphanet_145
+      # - Qualitative_or_quantitative_defects_of_alphadystroglycan_Orphanet_371024
+      # - Tumor_of_meninges_Orphanet_252025
+      # - Semilobar_holoprosencephaly_Orphanet_220386
+      # - Developmental_defect_of_the_eye_Orphanet_98553
+      # - Tumor_of_endocrine_glands_Orphanet_182130
+      # - Congenital_alacrima_Orphanet_98604
+      # - Laminopathy_Orphanet_98301
+      # - Rare_disorder_with_ptosis_Orphanet_98578
+      # - Myeloproliferative_neoplasm_Orphanet_98274
+      # - Rare_familial_disorder_with_hypertrophic_cardiomyopathy_Orphanet_99739
+      # - 46XX_difference_of_sex_development_Orphanet_2982
+      # - Autosomal_monosomy_Orphanet_102020
+      # - Inherited_isolated_arrhythmogenic_ventricular_dysplasia_biventricular_variant_Orphanet_293899
+      # - Short_ribpolydactyly_syndrome_Orphanet_1505
+      # - Progressive_myoclonic_epilepsy_Orphanet_98261
+      # - Rare_autosomal_recessive_nonsyndromic_sensorineural_deafness_type_DFNB_Orphanet_90636
+      # - Mitochondrial_disease_Orphanet_68380
+      # - Hereditary_sensory_and_autonomic_neuropathy_Orphanet_140471
+      # - Leber_congenital_amaurosis_Orphanet_65
+      # - Idiopathic_interstitial_pneumonia_Orphanet_98300
+      # - DiamondBlackfan_anemia_Orphanet_124
+      # - Amyotrophic_lateral_sclerosis_Orphanet_803
+      # - Autosomal_dominant_cerebellar_ataxia_Orphanet_99
+      # - Heterotaxia_Orphanet_450
+      # - Fanconi_anemia_Orphanet_84
+      # - Acute_promyelocytic_leukemia_Orphanet_520
+      # - MELAS_Orphanet_550
+      # - Dyskeratosis_congenita_Orphanet_1775
+      # - Noonan_syndrome_Orphanet_648
+      # - Normosmic_congenital_hypogonadotropic_hypogonadism_Orphanet_432
+      # - Glycogen_storage_disease_Orphanet_79201
+      # - Hemoglobinopathy_Orphanet_68364
+      # - Familial_long_QT_syndrome_Orphanet_768
+      # - Isolated_congenital_microcephaly_Orphanet_199642
+      # - Neuromuscular_junction_disease_Orphanet_98491
+      # - Seckel_syndrome_Orphanet_808
+      # - Epilepsy_syndrome_Orphanet_166463
+      # - MODY_Orphanet_552
+      # - Inherited_isolated_arrhythmogenic_cardiomyopathy_dominantleft_variant_Orphanet_293888
+      # - Idiopathic_pulmonary_fibrosis_Orphanet_2032
+      # - Differentiated_thyroid_carcinoma_Orphanet_146
+      # - 46XY_partial_gonadal_dysgenesis_Orphanet_251510
+      # - Giant_cell_glioblastoma_Orphanet_251579
+      # - Congenital_stationary_night_blindness_Orphanet_215
+      # - Craniosynostosis_Orphanet_1531
+      # - Familial_atrial_fibrillation_Orphanet_334
+      # - Nemaline_myopathy_Orphanet_607
+      # - Meningioma_Orphanet_2495
+      # - Highgrade_astrocytoma_Orphanet_251561
+      # - Behet_disease_Orphanet_117
+      # - Astrocytoma_Orphanet_94
+      # - Midline_interhemispheric_variant_of_holoprosencephaly_Orphanet_93926
+      # - Genetic_steroidresistant_nephrotic_syndrome_Orphanet_656
+      # - Hereditary_pheochromocytomaparaganglioma_Orphanet_29072
+      # - Earlyonset_partial_cataract_Orphanet_98992
+      # - Urogenital_tract_malformation_Orphanet_83001
+      # - BardetBiedl_syndrome_Orphanet_110
+      # - Rare_thyroid_carcinoma_Orphanet_100088
+      # - Motor_neuron_disease_Orphanet_98503
+      # - Premature_aging_Orphanet_79389
+      # - Hypopigmentation_of_the_skin_Orphanet_79376
+      # - Earlyonset_nuclear_cataract_Orphanet_98991
+      # - Lynch_syndrome_Orphanet_144
+      # - Microform_holoprosencephaly_Orphanet_280200
+      # - Arthrogryposis_multiplex_congenita_Orphanet_1037
+      # - Imprinting_disorders_Orphanet_641343
+      # - Cobblestone_lissencephaly_Orphanet_51577
+      # - Cone_rod_dystrophy_Orphanet_1872
+      # - Congenital_disorder_of_glycosylation_Orphanet_137
+      # - Total_earlyonset_cataract_Orphanet_98994
+      # - Sphingolipidosis_Orphanet_79225
+      # - Septopreoptic_holoprosencephaly_Orphanet_280195
+      # - Motor_stereotypies_Orphanet_306765
+      # - Nonacquired_combined_pituitary_hormone_deficiency_Orphanet_467
+      # - Thrombotic_microangiopathy_Orphanet_93573
+      # - Focal_palmoplantar_keratoderma_Orphanet_307837
+      # - Posterior_uveitis_Orphanet_280892
+      # - Ciliopathy_Orphanet_363250
+      # - Rare_thyroid_tumor_Orphanet_100087
+      # - Early_infantile_epileptic_encephalopathy_Orphanet_1934
+      # - Acute_lymphoblastic_leukemia_Orphanet_513
+      # - Intestinal_polyposis_syndrome_Orphanet_104010
+      # - Rare_cardiomyopathy_Orphanet_167848
+      # - Williams_syndrome_Orphanet_904
+      # - Nephronophthisis_Orphanet_655
+      # - Spondyloepiphyseal_dysplasia_and_spondyloepimetaphyseal_dysplasia_Orphanet_253
+      # - Uveitis_Orphanet_98715
+      # - Ciliopathies_with_major_skeletal_involvement_Orphanet_93426
+      # - Tetralogy_of_Fallot_Orphanet_3303
+      # - Hereditary_spastic_paraplegia_Orphanet_685
+      # - Agammaglobulinemia_Orphanet_183669
+      # - Muscular_dystrophy_Orphanet_98473
+      # - Mitochondrial_DNAassociated_Leigh_syndrome_Orphanet_255210
+      # - Myelodysplasticmyeloproliferative_disease_Orphanet_98275
+      # - Neuromuscular_disease_Orphanet_68381
+      # - Autosomal_recessive_nonsyndromic_intellectual_disability_Orphanet_88616
+      # - Glioblastoma_Orphanet_360
+      # - Skeletal_muscle_disease_Orphanet_98472
+      # - Distal_hereditary_motor_neuropathy_Orphanet_53739
+      # - Genetic_intestinal_polyposis_Orphanet_363314
+      # - Hereditary_ataxia_Orphanet_183518
+      # - Amelogenesis_imperfecta_Orphanet_88661
+      # - 1p36_deletion_syndrome_Orphanet_1606
+      # - EhlersDanlos_syndrome_Orphanet_98249
+      # - Rare_autosomal_dominant_nonsyndromic_sensorineural_deafness_type_DFNA_Orphanet_90635
+      # - Familial_dilated_cardiomyopathy_Orphanet_217607
+      # - Arthrogryposis_syndrome_Orphanet_109007
+      # - Earlyonset_nonsyndromic_cataract_Orphanet_91492
+      # - Inherited_isolated_arrhythmogenic_cardiomyopathy_dominantright_variant_Orphanet_293910
+      # - Nonsyndromic_male_infertility_due_to_sperm_motility_disorder_Orphanet_276234
+      # - Male_infertility_with_teratozoospermia_due_to_single_gene_mutation_Orphanet_399808
+      # - Familial_melanoma_Orphanet_618
+      # - Disorder_of_lipid_metabolism_Orphanet_309005
+      # - Glial_tumor_Orphanet_182067
+      # - Brugada_syndrome_Orphanet_130
+      # - Left_ventricular_noncompaction_Orphanet_54260
+      # - Inherited_isolated_arrhythmogenic_cardiomyopathy_Orphanet_217656
+      # - Primary_ciliary_dyskinesia_Orphanet_244
+      # - Corneal_dystrophy_Orphanet_34533
+      # - Nonspecific_earlyonset_epileptic_encephalopathy_Orphanet_442835
+      # - Hemolytic_uremic_syndrome_Orphanet_544458
+      # - Muscular_lipidosis_Orphanet_206953
+      # - Renal_cell_carcinoma_Orphanet_217071
+      # - Genetic_46XX_difference_of_sex_development_Orphanet_325697
+      # - Severe_immunemediated_enteropathy_Orphanet_94075
+      # - Youngonset_Parkinson_disease_Orphanet_2828
+      # - Ectodermal_dysplasia_syndrome_Orphanet_79373
+      # - Sideroblastic_anemia_Orphanet_1047
+      # - Congenital_limb_malformation_Orphanet_68378
+      # - Alobar_holoprosencephaly_Orphanet_93925
+      # - Rare_chromosomal_anomaly_Orphanet_68335
+    pattern:
+      name: "${item}"
+      properties:
+        trait_gene_list_file: ${orpha_dir}/${item}.list
+        trait_type: rare
+    subsets:
+      - rare
+    parent: 
+      - rare
+      - portal_traits
+
+  # Falcon Traits
+  falcon_traits:
+    class: trait
+    operation: for_each_item
+    input:
+      - standing_height
+      - body_mass_index
+      - whole_body_fat_free_mass
+      - mean_platelet_thrombocyte_volume
+      - alkaline_phosphatase
+      - calcium
+      - cystatin_c
+      - glycated_hemoglobin_HbA1c
+      - high_density_lipoprotein_HDL
+      - igf_1
+    pattern:
+      name: "${item}"
+      properties:
+        trait_name: "${item}"
+    parent:
+      - falcon_traits
+
+  # Experimental Run Templates
+  common_runs:
+    class: run
+    operation: for_each_class
+    input:
+      class_name: trait
+      if_subset: [common]
+    prefix: run
+    pattern:
+      name: "${prefix}__${item}"
+      properties:
+        trait_name: "${item}"
+    parent: 
+      - 1__full_oa4ol__common
+      - 3__full_oa4ol_lincs_expanded__common
+      - 5__full_oa4ol_msigdb_expanded__common
+      - 7__full_all_expanded__common
+      - 9__no_circularity__common
+      - 11__no_circularity_lincs_expanded__common
+      - 13__no_circularity_msigdb_expanded__common
+      - 15__no_circularity_all_expanded__common
+      - 17__msigdb_nohp__common
+      - 19__msigdb_pathways__common
+      - 31__full_textmining__common
+      - 33__text_mining_only_gwas__common
+      - 35__text_mining_no_gwas__common
+      - 100__portal_model__common
+
+  # rare_runs:
+  #   class: run
+  #   operation: for_each_class
+  #   input:
+  #     class_name: trait
+  #     if_subset: [rare]
+  #   prefix: run
+  #   pattern:
+  #     name: "${prefix}__${item}"
+  #     properties:
+  #       trait_name: "${item}"
+  #   parent:
+  #     - 2__full_oa4ol__rare
+  #     - 4__full_oa4ol_lincs_expanded__rare
+  #     - 6__full_oa4ol_msigdb_expanded__rare
+  #     - 8__full_all_expanded__rare
+  #     - 10__no_circularity__rare
+  #     - 12__no_circularity_lincs_expanded__rare
+  #     - 14__no_circularity_msigdb_expanded__rare
+  #     - 16__no_circularity_all_expanded__rare
+  #     - 18__msigdb_nohp__rare
+  #     - 20__msigdb_pathways__rare
+  #     - 32__full_textmining__rare
+  #     - 34__text_mining_only_gwas__rare
+  #     - 101__portal_model__rare
+
+  # # Masking templates
+  # mask_templates:
+  #   class: mask
+  #   operation: iter.combination
+  #   input:
+  #     - name: trait
+  #       class_name: trait
+  #       if_subset: [rare]
+  #     - name: mask
+  #       values:
+  #         - 0.05
+  #         - 0.1
+  #         - 0.15
+  #         - 0.2
+  #         - 0.25
+  #         - 0.3
+  #   prefix: mask
+  #   pattern:
+  #     name: "${prefix}__${item:trait}__mask-${item:mask}"
+  #     properties:
+  #       trait_name: "${item:trait}"
+  #       mask_percentage: "${item:mask}"
+  #     parent: "run__${item:trait}"
+  
+  # Duplicate Masking template for rare (faster runs)
+  rare_runs_2:
+    class: run
+    operation: for_each_class
+    input:
+      class_name: trait
+      if_subset: [rare]
+    prefix: run_v2
+    pattern:
+      name: "${prefix}__${item}"
+      properties:
+        trait_name: "${item}"
+    parent:
+      - 2__full_oa4ol__rare
+      - 4__full_oa4ol_lincs_expanded__rare
+      - 6__full_oa4ol_msigdb_expanded__rare
+      - 8__full_all_expanded__rare
+      - 10__no_circularity__rare
+      - 12__no_circularity_lincs_expanded__rare
+      - 14__no_circularity_msigdb_expanded__rare
+      - 16__no_circularity_all_expanded__rare
+      - 18__msigdb_nohp__rare
+      - 20__msigdb_pathways__rare
+      - 32__full_textmining__rare
+      - 34__text_mining_only_gwas__rare
+      - 36__text_mining_no_gwas__rare
+      - 101__portal_model__rare
+
+  # P-Experiment templates
+  p_experiment_templates:
+    class: p_experiment
+    operation: iter.combination
+    input:
+      - name: trait
+        class_name: trait
+        if_subset: [well_powered]
+      - name: model
+        values:
+          - msigdb_mouse_p
+          - portal_model
+          - msigdb_nohp_all_solo
+          - msigdb_nohp_solo
+          - lincs_all_solo
+          - ocr_mouse_solo
+          - mouse_2024_solo
+          - orpha_solo
+          - pops_sparse_small_solo
+          - string_notext_medium_solo
+          - impc_solo
+          - ocr_human_solo
+          - mouse_KO_2024_solo
+          - enrichr_filtered_all_solo
+          - lincs_aby_solo
+          - lincs_cp_solo
+          - lincs_lig_solo
+          - lincs_oe_solo
+          - lincs_shRNA_solo
+          - lincs_siRNA_solo
+          - lincs_xpr_solo
+          - msigdb_c1_solo
+          - msigdb_c2_solo
+          - msigdb_c3_solo
+          - msigdb_c4_solo
+          - msigdb_c5_nohp_solo
+          - msigdb_c6_solo
+          - msigdb_c7_solo
+          - msigdb_c8_solo
+          - msigdb_h_solo
+          - msigdb_c1_c3_c4_c6_c7_c8_solo
+          - msigdb_c2_cp_solo
+          - string_textmining_solo
+          - string_notext_medium_solo
+          - mesh_full_textmining_solo
+          - rummageo_solo
+          - mesh_no_gwas_solo
+          - mesh_only_gwas_solo
+          - mesh_only_drugs_solo
+          - mesh_no_drugs_solo
+          - mesh_only_gwas_and_no_drugs_solo
+          - mesh_no_gwas_and_no_drugs_solo
+          - mesh_no_gwas_and_only_drugs_solo
+          - mesh_only_gwas_and_only_drugs_solo
+          - msigdb_nohp_mouse_concat_solo
+      - name: geneset_size_fraction
+        values:
+          - 0.1
+          - 0.2
+          - 0.3
+          - 0.4
+          - 0.5
+          - 0.6
+          - 0.7
+          - 0.8
+          - 0.9
+          - 1.0
+    prefix: pe
+    pattern:
+      name: "${prefix}__${item:trait}__${item:model}__gsf-${item:geneset_size_fraction}"
+      properties:
+        trait_name: "${item:trait}"
+        model_name: "${item:model}"
+        geneset_size_fraction: "${item:geneset_size_fraction}"
+    parent:
+      - well_powered
+
+  soloed_models:
+    class: model
+    operation: for_each_item
+    input:
+      - msigdb_nohp_all_solo
+      - msigdb_nohp_solo
+      - lincs_all_solo
+      - ocr_mouse_solo
+      - rummageo_solo
+      - mouse_2024_solo
+      - orpha_solo
+      - pops_sparse_small_solo
+      - impc_solo
+      - ocr_human_solo
+      - mouse_KO_2024_solo
+      - enrichr_filtered_all_solo
+      - lincs_aby_solo
+      - lincs_cp_solo
+      - lincs_lig_solo
+      - lincs_oe_solo
+      - lincs_shRNA_solo
+      - lincs_siRNA_solo
+      - lincs_xpr_solo
+      - msigdb_c1_solo
+      - msigdb_c2_solo
+      - msigdb_c3_solo
+      - msigdb_c4_solo
+      - msigdb_c5_nohp_solo
+      - msigdb_c6_solo
+      - msigdb_c7_solo
+      - msigdb_c8_solo
+      - msigdb_h_solo
+      - msigdb_c1_c3_c4_c6_c7_c8_solo
+      - msigdb_c2_cp_solo
+      - string_textmining_solo
+      - string_notext_medium_solo
+      - mesh_full_textmining_solo
+      - mesh_no_gwas_solo
+      - mesh_only_gwas_solo
+      - mesh_only_drugs_solo
+      - mesh_no_drugs_solo
+      - mesh_only_gwas_and_no_drugs_solo
+      - mesh_no_gwas_and_no_drugs_solo
+      - mesh_no_gwas_and_only_drugs_solo
+      - mesh_only_gwas_and_only_drugs_solo
+      - msigdb_nohp_mouse_concat_solo
+    pattern:
+      name: "${item}"
+    parent:
+      - p_validation
+
+  model_p_results:
+    class: results
+    operation: for_each_item
+    input:
+      - msigdb_nohp_all_solo
+      - msigdb_nohp_solo
+      - lincs_all_solo
+      - ocr_mouse_solo
+      - rummageo_solo
+      - mouse_2024_solo
+      - orpha_solo
+      - pops_sparse_small_solo
+      - impc_solo
+      - ocr_human_solo
+      - mouse_KO_2024_solo
+      - enrichr_filtered_all_solo
+      - lincs_aby_solo
+      - lincs_cp_solo
+      - lincs_lig_solo
+      - lincs_oe_solo
+      - lincs_shRNA_solo
+      - lincs_siRNA_solo
+      - lincs_xpr_solo
+      - msigdb_c1_solo
+      - msigdb_c2_solo
+      - msigdb_c3_solo
+      - msigdb_c4_solo
+      - msigdb_c5_nohp_solo
+      - msigdb_c6_solo
+      - msigdb_c7_solo
+      - msigdb_c8_solo
+      - msigdb_h_solo
+      - msigdb_c1_c3_c4_c6_c7_c8_solo
+      - msigdb_c2_cp_solo
+      - string_textmining_solo
+      - string_notext_medium_solo
+      - mesh_full_textmining_solo
+      - mesh_no_gwas_solo
+      - mesh_only_gwas_solo
+      - mesh_only_drugs_solo
+      - mesh_no_drugs_solo
+      - mesh_only_gwas_and_no_drugs_solo
+      - mesh_no_gwas_and_no_drugs_solo
+      - mesh_no_gwas_and_only_drugs_solo
+      - mesh_only_gwas_and_only_drugs_solo
+      - msigdb_nohp_mouse_concat_solo
+    pattern:
+      name: "${item}__p_results"
+      properties:
+        model_name: "${item}"
+    parent:
+      - p_validation
+
+  top_common_runs:
+    class: run
+    operation: for_each_class
+    input:
+      class_name: trait
+      if_subset: [common]
+    prefix: top
+    pattern:
+      name: "${prefix}__run__${item}"
+      properties:
+        trait_name: "${item}"
+    parent:
+      - top__mouse_2024__common
+      - top__mesh_no_gwas__common
+      - top__msigdb_c2_cp__common
+      - top__mouse_ko_2024__common
+      - top__rummageo__common
+      - top__all_libraries__common
+
+  top_rare_runs:
+    class: run
+    operation: for_each_class
+    input:
+      class_name: trait
+      if_subset: [rare]
+    prefix: top
+    pattern:
+      name: "${prefix}__run__${item}"
+      properties:
+        trait_name: "${item}"
+    parent:
+      - top__mouse_2024__rare
+      - top__mesh_no_gwas__rare
+      - top__msigdb_c2_cp__rare
+      - top__mouse_ko_2024__rare
+      - top__rummageo__rare
+      - top__all_libraries__rare

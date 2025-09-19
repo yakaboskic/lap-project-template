@@ -1,0 +1,484 @@
+config: "/humgen/diabetes2/users/chase/lap/projects/pigean/config/validation.back2future.cfg"
+
+keys:
+  base_dir: "/humgen/diabetes2/users/chase/lap/projects/pigean"
+  unix_out_dir: "${base_dir}/out"
+  log_dir: "${base_dir}/log"
+  raw_dir: "${base_dir}/raw"
+  raw_gwas_dir: "${raw_dir}/gwas/processed"
+  web_out_dir: "http://internal.broadinstitute.org/~cyakabos/pigean"
+  default_umask: "002"
+
+
+classes:
+  back2future_comparisons:
+    class: project
+    parent: null
+    properties:
+      bim_file: "/humgen/diabetes/users/chase/lap/projects/pigean/lib/magma/data/g1000_eur.bim"
+      model_info_file: ${raw_dir}/model-info.yaml
+
+  pigean:
+    class: method
+    parent: back2future_comparisons
+
+  # Pigean Models
+  portal_model_2018:
+    class: model
+    parent: pigean
+  
+  portal_model:
+    class: model
+    parent: pigean
+
+  full_textmining_2018:
+    class: model
+    parent: pigean
+
+  textmining_no_gwas_2018:
+    class: model
+    parent: pigean
+
+  textmining_no_gwas_2018:
+    class: model
+    parent: pigean
+
+  textmining_only_gwas_2018:
+    class: model
+    parent: pigean
+
+  textmining_no_drugs_2018:
+    class: model
+    parent: pigean
+
+  textmining_only_drugs_2018:
+    class: model
+    parent: pigean
+
+  textmining_no_gwas_and_no_drugs_2018:
+    class: model
+    parent: pigean
+
+  textmining_no_gwas_and_only_drugs_2018:
+    class: model
+    parent: pigean
+
+  textmining_only_gwas_and_no_drugs_2018:
+    class: model
+    parent: pigean
+  
+  textmining_only_gwas_and_only_drugs_2018:
+    class: model
+    parent: pigean
+  
+  full_textmining:
+    class: model
+    parent: pigean
+
+  textmining_no_gwas:
+    class: model
+    parent: pigean
+
+  textmining_only_gwas:
+    class: model
+    parent: pigean
+
+  textmining_no_drugs:
+    class: model
+    parent: pigean
+
+  textmining_only_drugs:
+    class: model
+    parent: pigean
+
+  textmining_no_gwas_and_no_drugs:
+    class: model
+    parent: pigean
+
+  textmining_no_gwas_and_only_drugs:
+    class: model
+    parent: pigean
+
+  textmining_only_gwas_and_no_drugs:
+    class: model
+    parent: pigean
+  
+  textmining_only_gwas_and_only_drugs:
+    class: model
+    parent: pigean
+
+  # Magma
+  magma:
+    class: method
+    parent: back2future_comparisons
+  
+  # Null models
+  null_magma_model:
+    class: model
+    parent: magma
+
+  # Geneset List Classes
+  msigdb_2018:
+    class: geneset
+    parent: back2future_comparisons
+  
+  mouse_2018:
+    class: geneset
+    parent: back2future_comparisons
+
+  mesh_full_textmining_2018:
+    class: geneset
+    parent: back2future_comparisons
+
+  mesh_no_gwas_2018:
+    class: geneset
+    parent: back2future_comparisons
+
+  mesh_only_gwas_2018:
+    class: geneset
+    parent: back2future_comparisons
+
+  mesh_no_drugs_2018:
+    class: geneset
+    parent: back2future_comparisons
+
+  mesh_only_drugs_2018:
+    class: geneset
+    parent: back2future_comparisons
+
+  mesh_no_gwas_and_no_drugs_2018:
+    class: geneset
+    parent: back2future_comparisons
+
+  mesh_no_gwas_and_only_drugs_2018:
+    class: geneset
+    parent: back2future_comparisons
+
+  mesh_only_gwas_and_no_drugs_2018:
+    class: geneset
+    parent: back2future_comparisons
+
+  mesh_only_gwas_and_only_drugs_2018:
+    class: geneset
+    parent: back2future_comparisons
+  
+  mesh_full_textmining:
+    class: geneset
+    parent: back2future_comparisons
+
+  mesh_no_gwas:
+    class: geneset
+    parent: back2future_comparisons
+  
+  mesh_only_gwas:
+    class: geneset
+    parent: back2future_comparisons
+
+  mesh_no_drugs:
+    class: geneset
+    parent: back2future_comparisons
+  
+  mesh_only_drugs:
+    class: geneset
+    parent: back2future_comparisons
+
+  mesh_only_gwas_and_no_drugs:
+    class: geneset
+    parent: back2future_comparisons
+  
+  mesh_no_gwas_and_no_drugs:
+    class: geneset
+    parent: back2future_comparisons
+  
+  mesh_no_gwas_and_only_drugs:
+    class: geneset
+    parent: back2future_comparisons
+
+  mesh_only_gwas_and_only_drugs:
+    class: geneset
+    parent: back2future_comparisons
+  
+  msigdb_nohp:
+    class: geneset
+    parent: back2future_comparisons
+  
+  mouse_2024:
+    class: geneset
+    parent: back2future_comparisons
+
+templates:
+  traits:
+    class: gwas
+    operation: for_each_item
+    input:
+      - GWAS_AFHRC_AFGen.AF.2017
+      - Miyazawa2023_AF_Mixed.AF.2023
+      - Prins2017_Biomarkers_EU.ALP.2017
+      - Jurgens2022_Quantitative_EU.ALP.2023
+      - Benyamin2017_ALS_Mixed.ALS.2017
+      - vanRheenen_2021_ALS_Mixed.ALS.2021
+      - Prins2017_Biomarkers_EU.ALT.2017
+      - Verma2024_MVPTraits_Mixed.ALT.2024
+      - GWAS_AMDGen.AMD.2013
+      - Verma2024_MVPTraits_Mixed.AMD.2024
+      - Prins2017_Biomarkers_EU.AST.2017
+      - Verma2024_MVPTraits_Mixed.AST.2024
+      - Prins2017_Biomarkers_EU.Alb.2017
+      - Verma2024_MVPTraits_Mixed.Alb.2024
+      - Ferreira2017_allergy_EU.Allergy.2017
+      - Loh2018_Eczema_EU.Allergy.2018
+      - GWAS_GEFOS-LeanBodyMass_eu.Ap-LM.2017
+      - Pei2020_ApLM_EU.Ap-LM.2020
+      - GWAS_BFpercent.BFP.2016
+      - Hubel2018_Body_EU.BFP.2019
+      - Hou2016_BIP_EU.BIP.2016
+      - Mullins2021_BIP_EU.BIP.2021
+      - GWAS_GIANT.BMI.2012
+      - GWAS_GiantUKBB_eu.BMI.2018
+      - GWAS_CKDGenConsortium_eu.BUN.2017
+      - Stanzick2021_CKD_mixed.BUN.2021
+      - Michailidou2017_BreastCancer_EU.BreastCancer.2017
+      - Rashkin2020_Cancers_EU.BreastCancer.2020
+      - GWAS_UKBiobankCARDIoGRAM.CAD.2017
+      - Aragam2022_CAD_Mixed.CAD.2022
+      - GWAS_CADT2D.CADinT2D.2017
+      - GWAS_CUHK_ea.CADinT2D.2019
+      - GWAS_IBDGenetics_eu.CD.2015
+      - Verma2024_MVPTraits_EU.CD.2024
+      - Willer2013_GLGC_lipids_eu.CHOL.2013
+      - Graham_2021_lipids_Mixed.CHOL.2021
+      - GWAS_MAGIC-InsulinSecretionOGTT_eu.CIR.2014
+      - Madsen2024_OGTT_EU.CIR.2024
+      - Pattaro2016_CKD_EU.CKD.2016
+      - Scholz2024_KidneyFunction_Mixed.CKD.2024
+      - Prins2017_Biomarkers_EU.CRP.2017
+      - Verma2024_MVPTraits_Mixed.CRP.2024
+      - GWAS_EGGC.ChildObesity.2012
+      - Bradfield2019_ChildObesity_EU.ChildObesity.2019
+      - GWAS_GS-SFHS-2789-3393_eu.Creatinine.2017
+      - Verma2024_MVPTraits_Mixed.Creatinine.2024
+      - Liang2017_BP_AF.DBP.2017
+      - Keaton2024_BP_EU.DBP.2024
+      - Horikoshi2016_FBW_Mixed.FBW.2016
+      - Warrington2019_BirthWeight_EU.FBW.2019
+      - GWAS_MAGIC-Metabochip_eu.FG.2012
+      - Verma2024_MVPTraits_EU.FG.2024
+      - GWAS_MAGIC-Metabochip_eu.FI.2012
+      - Lagou2021_FGFI_EU.FI.2021
+      - GWAS_DCSP2_ea.FIadjBMI.2011
+      - Chenji2021_Glycaemic_EU.FIadjBMI.2021
+      - Prins2017_Biomarkers_EU.Fbg.2017
+      - GWAS_BBJ_ea.Fbg.2019
+      - Prins2017_Biomarkers_EU.Ferritin.2017
+      - Verma2024_MVPTraits_Mixed.Ferritin.2024
+      - Prins2017_Biomarkers_EU.GGT.2017
+      - Jurgens2022_Quantitative_EU.GGT.2023
+      - GWAS_MAGIC-A1C_eu.HBA1C.2017
+      - Verma2024_MVPTraits_Mixed.HBA1C.2024
+      - Willer2013_GLGC_lipids_eu.HDL.2013
+      - Graham_2021_lipids_Mixed.HDL.2021
+      - GWAS_GIANT.HEIGHT.2012
+      - Yengo2022_Height_Mixed.HEIGHT.2022
+      - GWAS_GIANT-A.HIPC.2015
+      - Gurdasani2019_UGR_metabolic_traits_af.HIPC.2019
+      - GWAS_MAGIC-FGFI2010_eu.HOMAB.2010
+      - Madsen2024_OGTT_EU.HOMAB.2024
+      - GWAS_MAGIC-FGFI2010_eu.HOMAIR.2010
+      - Aliyu2024_IR_GME.HOMAIR.2024
+      - GWAS_HRgene.HR.2013
+      - Verma2024_MVPTraits_Mixed.HR.2024
+      - Liang2017_BP_AF.HYPERTENSION.2017
+      - Verma2024_MVPTraits_Mixed.HYPERTENSION.2024
+      - Prins2017_Biomarkers_EU.Hb.2017
+      - Verma2024_MVPTraits_Mixed.Hb.2024
+      - GWAS_IBDGenetics_eu.IBD.2015
+      - Liu2023_IBD_Mixed.IBD.2023
+      - Prins2017_Biomarkers_EU.IGF1.2017
+      - Jurgens2022_Quantitative_EU.IGF1.2023
+      - GWAS_MAGIC-ISI_eu.ISIadjAgeSex.2016
+      - Williamson2023_Insulin_Mixed.ISIadjAgeSex.2023
+      - GWAS_MAGIC-ISI_eu.ISIadjAgeSexBMI.2016
+      - Williamson2023_Insulin_Mixed.ISIadjAgeSexBMI.2023
+      - Hammerschlag2017_Insomnia_EU.Insomnia.2017
+      - Verma2024_MVPTraits_Mixed.Insomnia.2024
+      - Sniekers2017_Intelligence_EU.Intelligence.2017
+      - Savage2018_Intelligence_EU.Intelligence.2018
+      - Springelkamp2017_POAG_EU.Intraocular_pressure.2017
+      - Khawaja2018_IntraocularPressure_EU.Intraocular_pressure.2018
+      - Willer2013_GLGC_lipids_eu.LDL.2013
+      - Graham_2021_lipids_Mixed.LDL.2021
+      - Lambert2013_AD_EU.LateAD.2013
+      - Kunkle2019_Alzheimers_eu.LateAD.2019
+      - GWAS_PGC.MDD.2013
+      - Meng2024_MDD_Mixed.MDD.2024
+      - Day2017_MenarcheAge_EU.Men.2017
+      - Kentistou2024_MenarcheAge_Mixed.Men.2024
+      - Andlauer2016_MS_EU.MultipleSclerosis.2016
+      - Verma2024_MVPTraits_Mixed.MultipleSclerosis.2024
+      - GPC2015_Neuroticism_EU.Neuroticism.2015
+      - Luciano2017_Neuroticism_EU.Neuroticism.2018
+      - GWAS_MAGIC-FastingProInsulin_eu.PI.2011
+      - Broadaway2023_FastingProInsulin_EU.PI.2023
+      - Liang2017_BP_AF.PulsePress.2017
+      - Keaton2024_BP_EU.PulsePress.2024
+      - Okada2014_RhA_Mixed.RhA.2014
+      - Verma2024_MVPTraits_Mixed.RhA.2024
+      - Liang2017_BP_AF.SBP.2017
+      - Keaton2024_BP_EU.SBP.2024
+      - GWAS_PGC.SCZ.2013
+      - Trubetskoy2022_SCZ_Mixed.SCZ.2022
+      - Bentham2015_SLE_EU.SLE.2015
+      - Verma2024_MVPTraits_Mixed.SLE.2024
+      - GWAS_Stroke.Stroke_hemorrhagic.2014
+      - Verma2024_MVPTraits_Mixed.Stroke_hemorrhagic.2024
+      - SiGN2016_Stroke_Mixed.Stroke_ischemic.2016
+      - Mishra2022_Stroke_Mixed.Stroke_ischemic.2022
+      - GWAS_CADT2D.T2D.2017
+      - Suzuki2024_T2D_Mixed.T2D.2024
+      - GWAS_DIAGRAMimputed_eu.T2DadjBMI.2017
+      - GWAS_DIAMANTE_eu.T2DadjBMI.2018
+      - GWAS_GEFOS-LeanBodyMass_eu.TB-LM.2017
+      - Hubel2018_Body_EU.TB-LM.2019
+      - Willer2013_GLGC_lipids_eu.TG.2013
+      - Graham_2021_lipids_Mixed.TG.2021
+      - Prins2017_Biomarkers_EU_Males.Testosterone_total.2017
+      - Ruth2020_SexHormones_EU.Testosterone_total.2020
+      - Teumer2016_Albuminuria_eu.UACR.2016
+      - Scholz2024_KidneyFunction_Mixed.UACR.2024
+      - Teumer2016_Albuminuria_eu.UACR_DM.2016
+      - Teumer2019_UACR_DM_mixed.UACR_DM.2019
+      - GWAS_IBDGenetics_eu.UC.2015
+      - Verma2024_MVPTraits_Mixed.UC.2024
+      - GWAS_GUGC_eu.Urate.2013
+      - Jurgens2022_Quantitative_EU.Urate.2023
+      - GWAS_GIANT-A.WAIST.2015
+      - Gurdasani2019_UGR_metabolic_traits_af.WAIST.2019
+      - GWAS_GIANT-A.WHR.2015
+      - GWAS_UKBiobankGIANT_eu.WHR.2019
+      - GWAS_GIANT-A.WHRadjBMI.2015
+      - GWAS_UKBiobankGIANT_eu.WHRadjBMI.2019
+      - GWAS_GEFOS-UKBBeBMD_eu.eBMD.2017
+      - GWAS_UKBiobankGEFOS_eu.eBMD.2019
+      - Pattaro2016_CKD_EU.eGFRcrea.2016
+      - Liu2022_eGFRcrea_Mixed.eGFRcrea.2022
+      - Pattaro2016_CKD_EU.eGFRcreaInDiabetes.2016
+      - Winkler2022_eGFRcrea_Mixed.eGFRcreaInDiabetes.2022
+      - Pattaro2016_CKD_EU.eGFRcreaNoDiabetes.2016
+      - Winkler2022_eGFRcrea_Mixed.eGFRcreaNoDiabetes.2022
+      - Pattaro2016_CKD_EU.eGFRcys.2016
+      - Stanzick2021_CKD_mixed.eGFRcys.2021
+      - SiGN2016_Stroke_Mixed.toastCE.2016
+      - Jaworek2022_EOStroke_Mixed.toastCE.2022
+      - GWAS_CADISP.toastDETER.2016
+      - Jaworek2022_EOStroke_Mixed.toastDETER.2022
+      - SiGN2016_Stroke_Mixed.toastLAA.2016
+      - Jaworek2022_EOStroke_Mixed.toastLAA.2022
+      - SiGN2016_Stroke_Mixed.toastSAO.2016
+      - Jaworek2022_EOStroke_Mixed.toastSAO.2022
+      - SiGN2016_Stroke_Mixed.toastUNDETER.2016
+      - Jaworek2022_EOStroke_Mixed.toastUNDETER.2022
+    pattern:
+      name: "${item}"
+      properties:
+        study: "${item.split('.')[0]}"
+        trait: "${item.split('.')[1]}"
+        year: "${item.split('.')[-1]}"
+        gwas_file: "${raw_gwas_dir}/${item}.sumstats.gz"
+    parent:
+      - back2future_comparisons
+
+  magma_runs:
+    class: run
+    operation: for_each_class
+    input:
+      class_name: gwas
+    prefix: "run_magma"
+    pattern:
+      name: "${prefix}_${item}"
+      properties:
+        study: "${item.split('.')[0]}"
+        trait: "${item.split('.')[1]}"
+        year: "${item.split('.')[-1]}"
+        gwas_name: "${item}"
+    parent:
+      - null_magma_model
+
+  pigean_runs:
+    class: run
+    operation: for_each_class
+    input:
+      class_name: gwas
+    prefix: "run_pigean"
+    pattern:
+      name: "${prefix}_${item}"
+      properties:
+        study: "${item.split('.')[0]}"
+        trait: "${item.split('.')[1]}"
+        year: "${item.split('.')[-1]}"
+        gwas_name: "${item}"
+    parent:
+      - portal_model_2018
+      - full_textmining_2018
+      - textmining_no_gwas_2018
+      - textmining_only_gwas_2018
+      - textmining_no_drugs_2018
+      - textmining_only_drugs_2018
+      - textmining_no_gwas_and_no_drugs_2018
+      - textmining_no_gwas_and_only_drugs_2018
+      - textmining_only_gwas_and_no_drugs_2018
+      - textmining_only_gwas_and_only_drugs_2018
+      - portal_model
+      - full_textmining
+      - textmining_no_gwas
+      - textmining_only_gwas
+      - textmining_no_drugs
+      - textmining_only_drugs
+      - textmining_no_gwas_and_no_drugs
+      - textmining_no_gwas_and_only_drugs
+      - textmining_only_gwas_and_no_drugs
+      - textmining_only_gwas_and_only_drugs
+
+  rs_runs:
+    class: rs
+    operation: iter.combination
+    input:
+      - name: "direct"
+        values:
+          - 0
+          - 0.5
+          - 1
+          - 1.5
+          - 2
+          - 2.5
+          - 3
+          - 3.5
+          - 4
+          - 4.5
+          - 5
+          - 5.5
+          - 6
+      - name: "indirect"
+        values:
+          - 0
+          - 0.5
+          - 1
+          - 1.5
+          - 2
+          - 2.5
+          - 3
+          - 3.5
+          - 4
+          - 4.5
+          - 5
+          - 5.5
+          - 6
+    prefix: "run_rs"
+    pattern:
+      name: "${prefix}_direct_${item:direct}_indirect_${item:indirect}"
+      properties:
+        direct: "${item:direct}"
+        indirect: "${item:indirect}"
+    parent:
+      - back2future_comparisons
+
+

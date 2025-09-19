@@ -259,13 +259,13 @@ In your config file, add commands that call your workflows:
 ```cfg
 # Add commands for each workflow stage (using uv for dependency management)
 local cmd quality_control_cmd=$run_uv_cmd src/workflows/analysis_workflow.py qc \
-    --input-file !{input::dataset_file} \
-    --output-file !{output::qc_results_file}; \
+    !{input:--input-file:dataset_file} \
+    !{output:--output-file:qc_results_file}; \
     class_level analysis
 
 local cmd main_analysis_cmd=$run_uv_cmd src/workflows/analysis_workflow.py analysis \
-    --input-file !{input::qc_results_file} \
-    --output-file !{output::analysis_results_file}; \
+    !{input:--input-file:qc_results_file} \
+    !{output:--output-file:analysis_results_file}; \
     class_level analysis
 ```
 
@@ -525,8 +525,8 @@ With `uv`, environment management is automatic and reproducible:
 ```cfg
 # UV handles environment management automatically
 local cmd analysis_cmd=$run_uv_cmd src/workflows/analysis_workflow.py analysis \
-    --input !{input::data_file} \
-    --output !{output::results_file}; \
+    !{input:--input:data_file} \
+    !{output:--output:results_file}; \
     class_level analysis
 ```
 

@@ -11,12 +11,12 @@ A common antipattern in pipeline development is creating commands that do too mu
 ```cfg
 # ANTIPATTERN: Monolithic command
 cmd analyze_and_plot_cmd=python analyze.py \
-    --input !{input::data_file} \
+    !{input:--input:data_file} \
     --do-complex-calculation \
     --generate-intermediate-results \
     --create-summary-stats \
     --make-plots \
-    --output-html !{output::final_report}
+    !{output:--output-html:final_report}
 ```
 
 **Problems:**
@@ -33,18 +33,18 @@ Break each major operation into atomic, single-purpose stages:
 ```cfg
 # GOOD: Atomic stages
 cmd calculate_results_cmd=python analyze.py \
-    --input !{input::data_file} \
-    --output !{output::calculation_results}; \
+    !{input:--input:data_file} \
+    !{output:--output:calculation_results}; \
     class_level analysis
 
 cmd generate_summary_cmd=python summarize.py \
-    --input !{input::calculation_results} \
-    --output !{output::summary_stats}; \
+    !{input:--input:calculation_results} \
+    !{output:--output:summary_stats}; \
     class_level analysis
 
 cmd create_plots_cmd=python plot.py \
-    --input !{input::summary_stats} \
-    --output !{output::plots_html}; \
+    !{input:--input:summary_stats} \
+    !{output:--output:plots_html}; \
     class_level analysis
 ```
 
@@ -322,7 +322,7 @@ my-lap-project/
 ├── log/                         # Pipeline logs
 ├── tests/                       # Unit tests
 ├── docs/                        # Documentation
-├── requirements.txt             # Python dependencies
+├── pyproject.toml               # Python dependencies and project config
 └── README.md                    # Project overview
 ```
 

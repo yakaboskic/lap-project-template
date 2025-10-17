@@ -4,9 +4,12 @@ version = "0.1.0"
 description = "Template for LAP (Lightweight Analysis Pipeline) projects with workflow-based architecture"
 readme = "README.md"
 requires-python = ">=3.9"
+packages = []
 dependencies = [
     # Meta-sanity for LAP meta file management (REQUIRED)
     "meta-sanity",
+    # Lap Notebook for LAP notebook development
+    "lap-notebook",
 
     # Core data processing
     "pandas==2.3.2", # Required because Broad cluster sucks
@@ -63,10 +66,6 @@ all = [
 [tool.uv.sources]
 lap-notebook = { git = "https://github.com/yakaboskic/lap-notebook.git" }
 meta-sanity = { git = "https://github.com/yakaboskic/meta-sanity.git" }
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
 
 [tool.black]
 line-length = 88

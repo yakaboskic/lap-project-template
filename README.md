@@ -10,6 +10,7 @@ git clone <this-repo-url> my-lap-project
 cd my-lap-project
 
 # Install dependencies with uv (much faster than pip/venv)
+## This is the sync command you should use on the Broad cluster, because it sucks and we need to use 3.9
 uv sync -p 3.9 --no-install-project --all-groups
 
 # Configure for your system (using meta-sanity YAML format)

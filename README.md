@@ -10,7 +10,7 @@ git clone <this-repo-url> my-lap-project
 cd my-lap-project
 
 # Install dependencies with uv (much faster than pip/venv)
-uv sync --no-install-project
+uv sync -p 3.9 --no-install-project --all-groups
 
 # Configure for your system (using meta-sanity YAML format)
 cp config/starter.meta.yaml config/my-project.meta.yaml

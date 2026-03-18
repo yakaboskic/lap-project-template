@@ -12,8 +12,9 @@ dependencies = [
     "lap-notebook",
 
     # Core data processing
-    "pandas==2.3.2", # Required because Broad cluster sucks
-    "numpy==2.0.2", # Required because Broad cluster sucks
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "ipython>=8.18.1",
 ]
 
 [dependency-groups]
@@ -21,6 +22,7 @@ dependencies = [
 plotting = [
     "matplotlib>=3.3.0",
     "seaborn>=0.11.0",
+    "plotly>=5.0.0",
 ]
 
 statistics = [
@@ -47,9 +49,8 @@ notebook = [
 # Development dependencies
 dev = [
     "pytest>=6.0.0",
-    "black>=21.0.0",
-    "flake8>=3.9.0",
-    "isort>=5.0.0",
+    "ruff>=0.14.1",
+    "mypy>=1.18.2",
 ]
 
 # All optional dependencies combined
@@ -58,7 +59,7 @@ all = [
     "seaborn>=0.11.0",
     "scipy>=1.7.0",
     "statsmodels>=0.12.0",
-    "joblib>=1.0.0",
+    "joblib>=1.1.0",
     "pyyaml>=5.4.0",
     "tqdm>=4.60.0",
 ]
@@ -66,14 +67,6 @@ all = [
 [tool.uv.sources]
 lap-notebook = { git = "https://github.com/yakaboskic/lap-notebook.git" }
 meta-sanity = { git = "https://github.com/yakaboskic/meta-sanity.git" }
-
-[tool.black]
-line-length = 88
-target-version = ['py38']
-
-[tool.isort]
-profile = "black"
-line_length = 88
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

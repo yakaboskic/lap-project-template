@@ -18,3 +18,4 @@ All documentation for builing lap pipelines are available in the `docs` director
 - Your main development should take place in the `config` and `src` directories.
 - Users will generally put files that will need to be linked in their pipelines in the `raw`
 - NEVER change files in the `out` or `log` directories as these are controlled directly by LAP!
+- DO NOT TEST: I will separately perform all integration tests. Because we are in a mounted environment and running normal python commands here WILL NOT WORK! CRITICAL: DO NOT TEST!

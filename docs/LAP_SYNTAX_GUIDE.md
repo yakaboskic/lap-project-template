@@ -117,8 +117,10 @@ LAP uses special syntax for referencing files and properties:
 
 ### Properties
 ```cfg
-!{prop:--flag:classname:property}           # Property reference
-!{prop:--flag:classname}                    # Class instance name
+!{prop:--flag:classname:property}                                                   # Property reference
+!{prop:--flag:classname}                                                            # Class instance name
+!{prop:--flag:classname:property:if_prop=property:allow_empty=1:optional=1}        # Optional property (skips when not defined in meta)
+!{prop:--flag:classname:property:missing=}                                          # Property with empty default when missing
 ```
 
 ### Raw References
